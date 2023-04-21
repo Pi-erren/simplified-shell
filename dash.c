@@ -1,34 +1,38 @@
 #include <stdio.h>
-#include "read_input.h"
 #include <stdlib.h>
+#include <string.h>
+#include <sys/types.h>
+#include "process_input.h"
 
 int main(void)
 {
+    char *path = "/bin";
+    char *curr_dir = '/home';
 
-    // Useful variables
-    char **words = malloc(50 * sizeof(char *));
-    char *path = malloc(50 * sizeof(char));
-    size_t bufsize = 30;
-    char *dash = "dash> ";
-
-    // Programme
     while (1)
     {
 
-        // Read user input
-        printf("%s", dash);
-        getline(&line, &bufsize, stdin);
+        // Read input
+        char *words[50];
+        process_input(words);
 
-        // Exit command
-        if (line == "exit")
+        // exit command
+        if (strcmp(words[0], "exit") == 0)
         {
-            free(line);
+            free(words);
             exit(0);
         }
-        // else if ()
-        // {
-        // }
 
-        printf("%s", line);
+        // cd command
+        if (strcmp(words[0], "cd") == 0)
+        {
+        }
+
+        // path command
+        if (strcmp(words[0], "path") == 0)
+        {
+        }
+
+        // User command executed with commands from the directory of "path"
     }
 }
