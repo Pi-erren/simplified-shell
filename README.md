@@ -1,9 +1,9 @@
 ## Notes
 ./dash ne doit prendre aucun argument, sinon erreur
 ## Compile and Launch
-
-gcc dash.c -o dash
-chmod +x dash
-./dash
+go to root directory
+in terminal: 
+chmod +x compile.sh
+./compile.sh
 
 ## 
