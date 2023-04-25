@@ -1,5 +1,5 @@
-#ifndef USER_COMMAND
-#define USER_COMMAND
+#ifndef PROCESS_USER_COMMAND
+#define PROCESS_USER_COMMAND
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -7,13 +7,18 @@
 #include <unistd.h>
 #include <sys/wait.h>
 
-void user_command(char *path, char **words)
+void process_user_command(char **path, char **words)
 {
+    char *dir = path[0];
+
     int pid = fork();
+
     if (pid == 0)
     {
-        strcat(path, words[0]);
-        int x = execv(path, words);
+        strcat(dir, words[0]);
+
+        int x = execv(dir, words);
+
         if (x == -1)
         {
             printf("Error in executing the command\n");

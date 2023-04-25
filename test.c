@@ -81,7 +81,7 @@ int main()
             }
             else
             {
-                printf("token_count: %d\n", token_count);
+                printf("token_count: %d\nsize_of_path: %d\nreallocation of size: %lud\n", token_count, size_of_path, ((size_of_path + token_count - 1) * sizeof(char *)));
                 path = realloc(path, ((size_of_path + token_count - 1) * sizeof(char *)));
                 printf("path[%d]: %s", token_count, path[token_count]);
                 for (int i = 1; i < token_count; i++)
@@ -96,6 +96,7 @@ int main()
             {
                 printf("%s\n", path[i]);
             }
+            printf("%d\n", size_of_path);
         }
     }
     // else

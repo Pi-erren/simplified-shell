@@ -3,7 +3,7 @@
 ## Compile and Launch
 go to root directory
 in terminal: 
-chmod +x compile.sh
+chmod +x launch.sh
 ./compile.sh
 
 ## 
