@@ -22,17 +22,15 @@ char **process_input(int *token_count)
 
     while (token != NULL)
     {
-        if (*token_count > 0) // with keep index 0 to store the dir where execv will search the command
+        words[*token_count] = malloc(strlen(token) + 1);
+
+        if (*token_count > 0) // we keep index 0 to store the directory where execv will search the command
         {
-
-            words[*token_count] = malloc(strlen(token) + 1);
-
             strcpy(words[*token_count], token);
 
             token = strtok(NULL, " ");
-
-            (*token_count)++;
         }
+        (*token_count)++;
     }
 
     // Delete the carriage return
