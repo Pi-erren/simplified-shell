@@ -6,48 +6,42 @@
 #include <string.h>
 #include <unistd.h>
 #include <sys/wait.h>
+#include <sys/ipc.h>
+#include <sys/shm.h>
+#include "../handle_error/handle_error.h"
 
 void process_user_command(char **path, char **words, int *size_of_path, int *token_count)
 {
-    int pid = fork();
-    if (pid < 0)
-    {
-        printf("echec\n");
-        char error_message[30] = "An error has occurred\n";
-        write(STDERR_FILENO, error_message, strlen(error_message));
-    }
-    else if (pid == 0)
-    {
+    int a = fork();
 
-        printf("pid: %d", pid);
+    if (a == 0)
+    {
+        int nbr_of_fail = 0;
+
         for (int directory = 0; directory < *size_of_path; directory++)
         {
-            // Completing path to command and prepare words for execv function
-            char *dir_for_command = path[directory];
-            strcat(dir_for_command, words[1]);
+            // Creating path for command to execute
+            char *dir_for_command = malloc(strlen(path[directory]) + strlen(words[1]) * sizeof(char *));
+            strcat(strcat(dir_for_command, path[directory]), words[1]);
+
+            // Adapting words for execv command
+            words[0] = malloc(strlen(dir_for_command) * sizeof(char));
             words[0] = dir_for_command;
 
-            printf("\nexecv first arg: %s\nexecv second arg: {", words[0]);
-            for (int i = 0; i < *token_count; i++)
-            {
-                printf("words[%s], ", words[*token_count]);
-            }
-            printf("}\n");
+            // Trying to exec the command
+            nbr_of_fail += execv(words[0], words);
+        }
 
-            int error = execv(words[0], words);
-
-            if (error == -1)
-            {
-                char error_message[30] = "An error has occurred\n";
-                write(STDERR_FILENO, error_message, strlen(error_message));
-            }
+        if (nbr_of_fail == (-1 * (*size_of_path)))
+        {
+            handle_error();
         }
     }
+
+    // Parent process
     {
-        // Parent process
-        waitpid(pid, NULL, 0);
+        waitpid(a, NULL, 0);
     }
-    printf("user command executed\n");
 }
 
 #endif
