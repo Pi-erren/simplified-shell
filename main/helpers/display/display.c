@@ -6,6 +6,6 @@
 
 void display(char *location_dir)
 {
-    printf("dash: %s > ", location_dir);
+    printf("\033[0;32mdash\033[0;37m:\033[0;34m%s\033[0;37m >", location_dir);
 }
 #endif
