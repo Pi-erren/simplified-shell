@@ -10,5 +10,3 @@ chmod +x launch.sh
 ```
 ./launch.sh
 ```
-
-## 
