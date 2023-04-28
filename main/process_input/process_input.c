@@ -13,9 +13,8 @@ char **process_input(int *token_count)
     char *input = NULL;   // if input and input_len are initialized to null values,
     size_t input_len = 0; // they will be dynamically malloc
 
-    printf("dash> ");
     getline(&input, &input_len, stdin); // Read user input
-    char **words = malloc((input_len + 1) * sizeof(char *));
+    char **words = malloc((input_len) * sizeof(char *));
 
     // Analyse input words and store them in words array
     char *token = strtok(input, " ");
@@ -24,12 +23,10 @@ char **process_input(int *token_count)
     {
         words[*token_count] = malloc(strlen(token) + 1);
 
-        if (*token_count > 0) // we keep index 0 to store the directory where execv will search the command
-        {
-            strcpy(words[*token_count], token);
+        strcpy(words[*token_count], token);
 
-            token = strtok(NULL, " ");
-        }
+        token = strtok(NULL, " ");
+
         (*token_count)++;
     }
 

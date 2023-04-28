@@ -8,28 +8,24 @@
 #include <sys/wait.h>
 #include <sys/ipc.h>
 #include <sys/shm.h>
-#include "../handle_error/handle_error.h"
+#include "../helpers/handle_error/handle_error.h"
 
 void process_user_command(char **path, char **words, int *size_of_path, int *token_count)
 {
-    int a = fork();
+    int child_pid = fork();
 
-    if (a == 0)
+    if (child_pid == 0)
     {
-        int nbr_of_fail = 0;
+        int nbr_of_fail = 0; // count each fail of execv with path directories
 
         for (int directory = 0; directory < *size_of_path; directory++)
         {
             // Creating path for command to execute
-            char *dir_for_command = malloc(strlen(path[directory]) + strlen(words[1]) * sizeof(char *));
-            strcat(strcat(dir_for_command, path[directory]), words[1]);
-
-            // Adapting words for execv command
-            words[0] = malloc(strlen(dir_for_command) * sizeof(char));
-            words[0] = dir_for_command;
+            char *dir_for_command = malloc(strlen(path[directory]) + strlen(words[0]) * sizeof(char *));
+            strcat(strcat(dir_for_command, path[directory]), words[0]);
 
             // Trying to exec the command
-            nbr_of_fail += execv(words[0], words);
+            nbr_of_fail += execv(dir_for_command, words);
         }
 
         if (nbr_of_fail == (-1 * (*size_of_path)))
@@ -40,7 +36,7 @@ void process_user_command(char **path, char **words, int *size_of_path, int *tok
 
     // Parent process
     {
-        waitpid(a, NULL, 0);
+        waitpid(child_pid, NULL, 0);
     }
 }
 
