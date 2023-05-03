@@ -13,10 +13,11 @@
 char *process_cd_command(char **words)
 {
     char *location_dir = malloc(PATH_MAX * sizeof(char *));
+
     chdir(words[1]);
 
     getcwd(location_dir, PATH_MAX);
-    printf("location dir: %s\n", location_dir);
+
     return location_dir;
 }
 
