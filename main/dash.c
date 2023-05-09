@@ -30,11 +30,6 @@ int main(void)
 
     while (1)
     {
-        printf("\ndirs for commands:\n");
-        for (int i = 0; i < size_of_path; i++)
-        {
-            printf("new path[%d]: %s\n", i, path[i]);
-        }
 
         // Display for shell
         display(location_dir);
@@ -58,8 +53,7 @@ int main(void)
         // path command
         else if (strcmp(words[0], "path") == 0)
         {
-            size_of_path = 0;
-            path = process_path_command(words, &token_count, &size_of_path);
+            path = process_path_command(words, &token_count, &size_of_path, path);
         }
 
         // User command executed with commands from directories in path array

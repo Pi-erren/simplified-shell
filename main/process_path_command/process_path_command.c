@@ -7,22 +7,37 @@
 #include <unistd.h>
 #include <sys/wait.h>
 
-char **process_path_command(char **words, int *token_count, int *size_of_path)
+char **process_path_command(char **words, int *token_count, int *size_of_path, char **path)
 {
-    char **path = malloc(((*token_count) - 2) * sizeof(char *));
-
-    // Refill of path
-    for (int i = 1; i < (*token_count); i++)
+    if (*token_count > 1)
     {
-        path[*size_of_path] = malloc((strlen(words[i]) + 1));
 
-        char *new_path = words[i];
-        strcpy(path[*size_of_path], new_path);
+        *size_of_path = 0;
+        char **path = malloc(((*token_count) - 2) * sizeof(char *));
 
-        (*size_of_path)++;
+        // Refill of path
+        for (int i = 1; i < (*token_count); i++)
+        {
+            path[*size_of_path] = malloc((strlen(words[i]) + 1));
+
+            char *new_path = words[i];
+            strcpy(path[*size_of_path], new_path);
+
+            (*size_of_path)++;
+        }
+        return path;
     }
+    else
+    {
+        printf("\n");
+        for (int i = 0; i < *size_of_path; i++)
+        {
+            printf("directory %d: %s\n", i, path[i]);
+        }
+        printf("\n");
 
-    return path;
+        return path;
+    }
 }
 
 #endif
