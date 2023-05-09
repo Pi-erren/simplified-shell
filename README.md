@@ -13,9 +13,9 @@ chmod +x launch.sh
 
 # Specific commands available
 ## path
+* path arguments represent directories where the shell will search for executables
 * path takes an unlimited quantity of arguments
 * path default value is /bin/
-* arguments represent directory where the shell will search for executables
 * example: path /home/my_pc /bin/usr/  
     shell will then loop through the directories and execute the command
     in the first directory where he finds the command
@@ -25,7 +25,7 @@ chmod +x launch.sh
 path [path_to_directoy_1] ... [path_to_directory_n]
 ```
 
-* display actual path:
+* display actual path array:
 ```shell
 path
 ```
