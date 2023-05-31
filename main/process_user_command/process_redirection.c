@@ -1,19 +1,9 @@
-#ifndef PROCESS_USER_COMMAND
-#define PROCESS_USER_COMMAND
-
+#include <string.h>
 #include <stdio.h>
+#include <stdbool.h>
 #include <stdlib.h>
 
-#include <string.h>
-#include <unistd.h>
-#include <sys/wait.h>
-#include <sys/ipc.h>
-#include <sys/shm.h>
-#include <stdbool.h>
-#include "../helpers/handle_error/handle_error.h"
-#include "process_redirection.h"
-
-void process_user_command(char **path, char **words, int *size_of_path, int *token_count)
+char **process_redirection(char **words, int *token_count, int i)
 {
     // Search for redirection
     bool is_redirection = false;
@@ -100,53 +90,16 @@ void process_user_command(char **path, char **words, int *size_of_path, int *tok
                         new_words[k] = strcpy(new_words[k], redirection_array[counter1]);
                         counter1++;
                     }
-                    // printf("ok\n");
-                    new_words[size_of_new_words - 1] = malloc(strlen(words[(*token_count) - 1]) + 1);
-                    // printf("size of new words -1: %d\n", size_of_new_words - 1);
-                    // printf("last element of new words: %s\n", new_words[size_of_new_words - 1]);
-
-                    // printf("token count: %d\n", (*token_count));
-                    // printf("last element of words: %s\n", words[(*token_count) - 1]);
 
                     if (index_of_symbol == strlen(words[i]) - 1)
                     {
                         new_words[size_of_new_words - 1] = malloc(strlen(words[(*token_count) - 1]) + 1);
                         strcpy(new_words[size_of_new_words - 1], words[(*token_count) - 1]);
                     }
-                    for (int i = 0; i < size_of_new_words; i++)
-                    {
-                        printf("new_words[%d]: %s\n", i, new_words[i]);
-                    }
+                    return new_words;
                 }
             }
         }
     }
-    int child_pid = fork();
-
-    if (child_pid == 0)
-    {
-        int nbr_of_fail = 0; // count each fail of execv with path directories
-
-        for (int directory = 0; directory < *size_of_path; directory++)
-        {
-            // Creating path for command to execute
-            char *dir_for_command = malloc(strlen(path[directory]) + strlen(words[0]) * sizeof(char *));
-            strcat(strcat(dir_for_command, path[directory]), words[0]);
-
-            // Trying to exec the command
-            nbr_of_fail += execv(dir_for_command, words);
-        }
-
-        if (nbr_of_fail == (-1 * (*size_of_path)))
-        {
-            handle_error();
-        }
-    }
-
-    // Parent process
-    {
-        waitpid(child_pid, NULL, 0);
-    }
+    return words;
 }
-
-#endif
