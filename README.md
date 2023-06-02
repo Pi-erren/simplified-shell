@@ -1,5 +1,5 @@
 # Author
-* Pierre Neveu, Student at Dauphine University
+* Pierre Neveu, Student at Dauphine University, pierre.neveu@dauphine.eu
 * Project developped under Linux Ubuntu
 # I - Compile and Launch
 ## Compile
