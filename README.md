@@ -1,18 +1,22 @@
-# Notes
-./dash ne doit prendre aucun argument, sinon erreur
-# Compile and Launch
+# I - Compile and Launch
+## Compile
 go to root directory
 in terminal: 
 ```
-chmod +x launch.sh
+chmod +x compile.sh
+```
+```
+./compile.sh
+```
+## Launch
+* Warning: any command line argument will lead to an error
+```
+./dash
 ```
 
-```
-./launch.sh
-```
-
-# Specific commands available
-## path
+# II - Dash-specific commands and available functionalities
+## Dash-specific commands
+### path
 * path arguments represent directories where the shell will search for executables
 * path takes an unlimited quantity of arguments
 * path default value is /bin/
@@ -29,6 +33,8 @@ path [path_to_directoy_1] ... [path_to_directory_n]
 ```shell
 path
 ```
+### Functionalities
+* Dash can handle standard redirection '<'
 
 si erreur getline pas déclaré
 il faut rajouter:
