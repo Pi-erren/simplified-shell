@@ -3,7 +3,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-
+#include <fcntl.h>
 #include <string.h>
 #include <unistd.h>
 #include <sys/wait.h>
@@ -15,6 +15,9 @@
 
 void process_user_command(char **path, char **words, int *size_of_path, int *token_count)
 {
+    char **new_words;
+    int size_of_new_words;
+
     // Search for redirection
     bool is_redirection = false;
 
@@ -65,7 +68,6 @@ void process_user_command(char **path, char **words, int *size_of_path, int *tok
                             redirection_array[index] = strdup("<");
                             index++;
                         }
-
                         redirection_array[index] = strdup(token);
                         index++;
 
@@ -80,13 +82,9 @@ void process_user_command(char **path, char **words, int *size_of_path, int *tok
                     }
 
                     // Adapt words
-                    printf("index of symbol: %d\n", index_of_symbol);
-                    printf("i: %d\n", i);
+                    size_of_new_words = (*token_count) + size_of_redirection_array - 1;
+                    new_words = malloc(size_of_new_words * sizeof(char *));
 
-                    int size_of_new_words = (*token_count) + size_of_redirection_array - 1;
-                    printf("size of new words: %d\n", size_of_new_words);
-
-                    char **new_words = malloc(size_of_new_words * sizeof(char *));
                     for (int k = 0; k < i; k++)
                     {
                         new_words[k] = malloc(strlen(words[k]) + 1);
@@ -94,29 +92,25 @@ void process_user_command(char **path, char **words, int *size_of_path, int *tok
                     }
 
                     int counter1 = 0;
+
                     for (int k = i; k < i + size_of_redirection_array; k++)
                     {
                         new_words[k] = malloc(strlen(redirection_array[counter1]) + 1);
                         new_words[k] = strcpy(new_words[k], redirection_array[counter1]);
                         counter1++;
                     }
-                    // printf("ok\n");
-                    new_words[size_of_new_words - 1] = malloc(strlen(words[(*token_count) - 1]) + 1);
-                    // printf("size of new words -1: %d\n", size_of_new_words - 1);
-                    // printf("last element of new words: %s\n", new_words[size_of_new_words - 1]);
-
-                    // printf("token count: %d\n", (*token_count));
-                    // printf("last element of words: %s\n", words[(*token_count) - 1]);
 
                     if (index_of_symbol == strlen(words[i]) - 1)
                     {
                         new_words[size_of_new_words - 1] = malloc(strlen(words[(*token_count) - 1]) + 1);
                         strcpy(new_words[size_of_new_words - 1], words[(*token_count) - 1]);
                     }
-                    for (int i = 0; i < size_of_new_words; i++)
+
+                    for (int i = 0; i < size_of_redirection_array; i++)
                     {
-                        printf("new_words[%d]: %s\n", i, new_words[i]);
+                        free(redirection_array[i]);
                     }
+                    free(redirection_array);
                 }
             }
         }
@@ -125,27 +119,74 @@ void process_user_command(char **path, char **words, int *size_of_path, int *tok
 
     if (child_pid == 0)
     {
-        int nbr_of_fail = 0; // count each fail of execv with path directories
-
-        for (int directory = 0; directory < *size_of_path; directory++)
+        // Case 1: standard redirection
+        if (is_redirection)
         {
-            // Creating path for command to execute
-            char *dir_for_command = malloc(strlen(path[directory]) + strlen(words[0]) * sizeof(char *));
-            strcat(strcat(dir_for_command, path[directory]), words[0]);
+            char *file_name = new_words[size_of_new_words - 1];
+            int file_descriptor = open(file_name, O_RDONLY);
 
-            // Trying to exec the command
-            nbr_of_fail += execv(dir_for_command, words);
+            new_words[size_of_new_words - 2] = '\0';
+
+            if (file_descriptor == -1)
+            {
+                printf("file descriptor\n");
+                handle_error();
+            }
+            else
+            {
+
+                if (dup2(file_descriptor, STDIN_FILENO) == -1)
+                {
+                    printf("dup2\n");
+                    handle_error();
+                }
+                else
+                {
+
+                    for (int directory_index = 0; directory_index < *size_of_path; directory_index++)
+                    {
+                        int nbr_of_fail = 0;
+
+                        // Creating path for command to execute
+                        char *dir_for_command = malloc((strlen(path[directory_index]) + strlen(new_words[0])) * sizeof(char *));
+                        strcat(strcat(dir_for_command, path[directory_index]), new_words[0]);
+
+                        // Trying to exec the command
+                        nbr_of_fail += execv(dir_for_command, new_words);
+                        free(dir_for_command);
+                    }
+                    close(file_descriptor);
+                }
+            }
         }
 
-        if (nbr_of_fail == (-1 * (*size_of_path)))
+        // Case 3: normal command
+        else
         {
-            handle_error();
+            int nbr_of_fail = 0; // count each fail of execv with path directories
+
+            for (int directory_index = 0; directory_index < *size_of_path; directory_index++)
+            {
+                // Creating path for command to execute
+                char *dir_for_command = malloc((strlen(path[directory_index]) + strlen(words[0])) * sizeof(char *));
+                printf("path[%d]: %s", directory_index, path[directory_index]);
+                dir_for_command = strcat(strcat(dir_for_command, path[directory_index]), words[0]);
+
+                // Trying to exec the command
+                nbr_of_fail += execv(dir_for_command, words);
+            }
+
+            if (nbr_of_fail == (-1 * (*size_of_path)))
+            {
+                handle_error();
+            }
         }
     }
 
     // Parent process
     {
-        waitpid(child_pid, NULL, 0);
+        wait(NULL);
+        // waitpid(child_pid, NULL, 0);
     }
 }
 
