@@ -6,7 +6,7 @@
 
 #include "../helpers/handle_error/handle_error.h"
 
-void execute_standard_redirection(char **command, int *size_of_command, char **path, int *size_of_path)
+void execute_input_redirection(char **command, int *size_of_command, char **path, int *size_of_path)
 {
     char *file_name = command[(*size_of_command) - 1];
     int file_descriptor = open(file_name, O_RDONLY);

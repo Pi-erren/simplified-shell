@@ -3,7 +3,7 @@
 #include <stdbool.h>
 #include <stdlib.h>
 
-char **process_redirection(char **words, int *token_count, int *size_of_command, bool *is_redirection)
+char **process_redirection(char **words, int *token_count, int *size_of_command, bool *input_redirection, bool *output_redirection)
 {
     char **new_words;
 
@@ -14,14 +14,28 @@ char **process_redirection(char **words, int *token_count, int *size_of_command,
         for (int j = 0; j < strlen(curr_word); j++)
         {
             // if we find redirection symnol
-            if (curr_word[j] == '<')
+            if (curr_word[j] == '<' || curr_word[j] == '>')
             {
-                *is_redirection = true;
-
+                // Define type of redirection
                 // Find index of symbol in words[i]
-                int index_of_symbol;
+                int index_of_symbol = 0;
                 char *symbol;
-                symbol = strchr(words[i], '<');
+                char *redirection_symbol;
+
+                if (curr_word[j] == '<')
+                {
+                    *input_redirection = true;
+                    redirection_symbol = "<";
+                    symbol = strchr(words[i], '<');
+                }
+
+                if (curr_word[j] == '>')
+                {
+                    *output_redirection = true;
+                    redirection_symbol = ">";
+                    symbol = strchr(words[i], '>');
+                }
+
                 index_of_symbol = (int)(symbol - words[i]);
 
                 // if words[i] is just "<"" (so its len is 1), we don't need to process
@@ -46,13 +60,13 @@ char **process_redirection(char **words, int *token_count, int *size_of_command,
                     char **redirection_array = malloc(size_of_redirection_array * sizeof(char *));
 
                     // Tokenize words[i]
-                    char *token = strtok(copy, "<");
+                    char *token = strtok(copy, redirection_symbol);
                     int index = 0;
                     while (token != NULL)
                     {
                         if (index_of_symbol == 0 && index < size_of_redirection_array)
                         {
-                            redirection_array[index] = strdup("<");
+                            redirection_array[index] = strdup(redirection_symbol);
                             index++;
                         }
                         redirection_array[index] = strdup(token);
@@ -61,11 +75,11 @@ char **process_redirection(char **words, int *token_count, int *size_of_command,
                         // Add '<' as a separate element
                         if (index < size_of_redirection_array)
                         {
-                            redirection_array[index] = strdup("<");
+                            redirection_array[index] = strdup(redirection_symbol);
                             index++;
                         }
 
-                        token = strtok(NULL, "<");
+                        token = strtok(NULL, redirection_symbol);
                     }
 
                     // Adapt words
