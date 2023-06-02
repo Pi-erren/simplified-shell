@@ -29,3 +29,9 @@ path [path_to_directoy_1] ... [path_to_directory_n]
 ```shell
 path
 ```
+
+si erreur getline pas déclaré
+il faut rajouter:
+#define _GNU_SOURCE
+
+-Wall -Wextra -Werror -std=c17
