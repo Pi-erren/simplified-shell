@@ -12,12 +12,13 @@ chmod +x compile.sh
 ./compile.sh
 ```
 ### tests
-go to root directory
+
+**please note that some tests required a local path using your local user nameplease change this according to yours so that tests run correctly**
+ 
 in terminal: 
 ```
 chmod +x tests_compile.sh
 ```
-Please read warnings at the top of tests file
 ```
 ./tests_compile.sh
 ```
