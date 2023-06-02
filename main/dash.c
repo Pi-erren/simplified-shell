@@ -33,7 +33,7 @@ int main(int argc, char *argv[])
     int size_of_path = 1;
     char **path = init_path();
 
-    // Positioning to default directory "~"
+    // Positioning to home "/home"
     char *location_dir = init_location_dir();
 
     while (1)
