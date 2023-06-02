@@ -3,11 +3,11 @@
 #include <stdbool.h>
 #include <stdlib.h>
 
-char **process_redirection(char **words, int *token_count, int i)
+char **process_redirection(char **words, int *token_count, int *size_of_command, bool *is_redirection)
 {
-    // Search for redirection
-    bool is_redirection = false;
+    char **new_words;
 
+    // Search for redirection
     for (int i = 0; i < (*token_count); i++)
     {
         char *curr_word = words[i];
@@ -16,7 +16,7 @@ char **process_redirection(char **words, int *token_count, int i)
             // if we find redirection symnol
             if (curr_word[j] == '<')
             {
-                is_redirection = true;
+                *is_redirection = true;
 
                 // Find index of symbol in words[i]
                 int index_of_symbol;
@@ -55,7 +55,6 @@ char **process_redirection(char **words, int *token_count, int i)
                             redirection_array[index] = strdup("<");
                             index++;
                         }
-
                         redirection_array[index] = strdup(token);
                         index++;
 
@@ -70,13 +69,11 @@ char **process_redirection(char **words, int *token_count, int i)
                     }
 
                     // Adapt words
-                    printf("index of symbol: %d\n", index_of_symbol);
-                    printf("i: %d\n", i);
+                    (*size_of_command) = (*token_count) + size_of_redirection_array - 1;
+                    printf("%d\n", *size_of_command);
 
-                    int size_of_new_words = (*token_count) + size_of_redirection_array - 1;
-                    printf("size of new words: %d\n", size_of_new_words);
+                    new_words = malloc((*size_of_command) * sizeof(char *));
 
-                    char **new_words = malloc(size_of_new_words * sizeof(char *));
                     for (int k = 0; k < i; k++)
                     {
                         new_words[k] = malloc(strlen(words[k]) + 1);
@@ -93,13 +90,27 @@ char **process_redirection(char **words, int *token_count, int i)
 
                     if (index_of_symbol == strlen(words[i]) - 1)
                     {
-                        new_words[size_of_new_words - 1] = malloc(strlen(words[(*token_count) - 1]) + 1);
-                        strcpy(new_words[size_of_new_words - 1], words[(*token_count) - 1]);
+                        printf("ok\n");
+
+                        new_words[(*size_of_command) - 1] = malloc(strlen(words[(*token_count) - 1]) + 1);
+                        printf("ok\n");
+
+                        strcpy(new_words[(*size_of_command) - 1], words[(*token_count) - 1]);
+                        printf("ok\n");
                     }
+                    // free redirection array
+                    for (int i = 0; i < size_of_redirection_array; i++)
+                    {
+                        free(redirection_array[i]);
+                    }
+                    free(redirection_array);
                     return new_words;
                 }
+                (*size_of_command) = (*token_count);
+                return words;
             }
         }
     }
+    (*size_of_command) = (*token_count);
     return words;
 }
