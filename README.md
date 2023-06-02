@@ -1,5 +1,9 @@
+# Author
+* Pierre Neveu, Student at Dauphine University
+* Project developped under Linux Ubuntu
 # I - Compile and Launch
 ## Compile
+### dash
 go to root directory
 in terminal: 
 ```
@@ -8,12 +12,26 @@ chmod +x compile.sh
 ```
 ./compile.sh
 ```
+### tests
+go to root directory
+in terminal: 
+```
+chmod +x tests_compile.sh
+```
+Please read warnings at the top of tests file
+```
+./tests_compile.sh
+```
 ## Launch
+### dash
 * Warning: any command line argument will lead to an error
 ```
 ./dash
 ```
-
+### tests
+```
+./tests
+```
 # II - Dash-specific commands and available functionalities
 ## Dash-specific commands
 ### path
