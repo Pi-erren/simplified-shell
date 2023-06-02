@@ -7,6 +7,8 @@
 #include <unistd.h>
 #include <sys/wait.h>
 
+#define _GNU_SOURCE
+
 char **process_input(int *token_count)
 {
 
