@@ -53,9 +53,3 @@ path
 ```
 ### Functionalities
 * Dash can handle standard input '<' and output '>' redirection from and to a file
-
-si erreur getline pas déclaré
-il faut rajouter:
-#define _GNU_SOURCE
-
--Wall -Wextra -Werror -std=c17
