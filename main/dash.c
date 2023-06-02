@@ -18,8 +18,16 @@
 
 #include "helpers/display/display.h"
 
-int main(void)
+#include "helpers/handle_error/handle_error.h"
+
+int main(int argc, char *argv[])
 {
+    // Checking if no command line argument were given
+    if (argc > 1)
+    {
+        handle_error();
+        return 1;
+    }
 
     // Path array initialization
     int size_of_path = 1;
