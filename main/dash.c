@@ -20,7 +20,7 @@
 
 #include "helpers/handle_error/handle_error.h"
 
-int main(int argc)
+int main(int argc, char *argv[])
 {
     // Checking if no command line argument were given
     if (argc > 1)
