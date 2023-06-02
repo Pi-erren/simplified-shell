@@ -31,9 +31,10 @@ void execute_output_redirection(char **command, int *size_of_command, char **pat
         }
         else
         {
+            int nbr_of_fail = 0; // count each fail of execv with path directories
+
             for (int directory_index = 0; directory_index < *size_of_path; directory_index++)
             {
-                int nbr_of_fail = 0;
 
                 // Creating path for command to execute
                 char *dir_for_command = malloc((strlen(path[directory_index]) + strlen(command[0])) * sizeof(char *));
@@ -43,6 +44,13 @@ void execute_output_redirection(char **command, int *size_of_command, char **pat
                 nbr_of_fail += execv(dir_for_command, command);
                 free(dir_for_command);
             }
+
+            if (nbr_of_fail == (-1 * (*size_of_path)))
+            {
+                handle_error();
+            }
+
+            // Freeing
             for (int i = 0; i < (*size_of_command); i++)
             {
                 free(command[i]);
