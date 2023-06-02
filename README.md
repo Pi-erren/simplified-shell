@@ -2,10 +2,9 @@
 * Pierre Neveu, Student at Dauphine University, pierre.neveu@dauphine.eu
 * Project developped under Linux Ubuntu
 # I - Compile and Launch
+**go to root directory**
 ## Compile
 ### dash
-go to root directory
-in terminal: 
 ```
 chmod +x compile.sh
 ```
