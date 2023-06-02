@@ -29,12 +29,10 @@ char **process_path_command(char **words, int *token_count, int *size_of_path, c
     }
     else
     {
-        printf("\n");
         for (int i = 0; i < *size_of_path; i++)
         {
-            printf("directory %d: %s\n", i, path[i]);
+            printf("directory %d: %s\n", i + 1, path[i]);
         }
-        printf("\n");
 
         return path;
     }

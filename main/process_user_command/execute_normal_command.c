@@ -18,6 +18,8 @@ void execute_normal_command(char **path, char **words, int *size_of_path)
 
         // Trying to exec the command
         nbr_of_fail += execv(dir_for_command, words);
+
+        free(dir_for_command);
     }
 
     if (nbr_of_fail == (-1 * (*size_of_path)))

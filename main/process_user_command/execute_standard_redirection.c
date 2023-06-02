@@ -15,7 +15,6 @@ void execute_standard_redirection(char **command, int *size_of_command, char **p
 
     if (file_descriptor == -1)
     {
-        printf("file descriptor\n");
         handle_error();
     }
     else
