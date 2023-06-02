@@ -22,6 +22,7 @@
 
 int main(int argc, char *argv[])
 {
+    (void)argv; // get rid of unused parameter error
     // Checking if no command line argument were given
     if (argc > 1)
     {

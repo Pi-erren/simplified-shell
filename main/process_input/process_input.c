@@ -1,5 +1,6 @@
 #ifndef PROCESS_INPUT
 #define PROCESS_INPUT
+#define _GNU_SOURCE
 
 #include <stdio.h>
 #include <stdlib.h>

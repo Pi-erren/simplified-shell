@@ -11,7 +11,7 @@ char **process_redirection(char **words, int *token_count, int *size_of_command,
     for (int i = 0; i < (*token_count); i++)
     {
         char *curr_word = words[i];
-        for (int j = 0; j < strlen(curr_word); j++)
+        for (int j = 0; j < (int)strlen(curr_word); j++)
         {
             // if we find redirection symnol
             if (curr_word[j] == '<' || curr_word[j] == '>')
@@ -47,7 +47,7 @@ char **process_redirection(char **words, int *token_count, int *size_of_command,
 
                     // Determine in how many elements to split words[i]
                     int size_of_redirection_array;
-                    if (index_of_symbol == 0 || index_of_symbol == strlen(words[i]) - 1)
+                    if (index_of_symbol == 0 || index_of_symbol == (int)strlen(words[i]) - 1)
                     {
                         size_of_redirection_array = 2;
                     }
@@ -101,7 +101,7 @@ char **process_redirection(char **words, int *token_count, int *size_of_command,
                         counter1++;
                     }
 
-                    if (index_of_symbol == strlen(words[i]) - 1)
+                    if (index_of_symbol == (int)strlen(words[i]) - 1)
                     {
                         new_words[(*size_of_command) - 1] = malloc(strlen(words[(*token_count) - 1]) + 1);
                         strcpy(new_words[(*size_of_command) - 1], words[(*token_count) - 1]);
