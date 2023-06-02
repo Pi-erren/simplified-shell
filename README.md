@@ -13,7 +13,7 @@ chmod +x compile.sh
 ```
 ### tests
 
-**please note that some tests required a local path using your local user nameplease change this according to yours so that tests run correctly**
+**please note that some tests required a local path using your local user name, change the variable char *username at the start of tests.c file according to your local user name so that tests run correctly**
  
 in terminal: 
 ```
