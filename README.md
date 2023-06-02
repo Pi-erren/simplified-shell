@@ -51,5 +51,5 @@ path [path_to_directoy_1] ... [path_to_directory_n]
 ```shell
 path
 ```
-### Functionalities
+## Functionalities
 * Dash can handle standard input '<' and output '>' redirection from and to a file
