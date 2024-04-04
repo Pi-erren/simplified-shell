@@ -1,6 +1,7 @@
 # Author
-* Pierre Neveu, Student at Dauphine University, pierre.neveu@dauphine.eu
+* Pierre Neveu, Student at PSL Dauphine University, pierre.neveu@dauphine.eu
 * Project developped under Linux Ubuntu
+* Course: Operating system
 # I - Compile and Launch
 **go to root directory**
 ## Compile
